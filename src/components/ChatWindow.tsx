@@ -4,9 +4,9 @@ import { Message } from "@/types/chat";
 import { useState, useRef, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Send, Loader2, Copy, Download } from "lucide-react";
+import { Send, Loader2/*, Copy, Download*/ } from "lucide-react";
 import { MessageBubble } from "@/components/MessageBubble";
-import { cn } from "@/lib/utils";
+// import { cn } from "@/lib/utils";
 
 
 export function ChatWindow() {
@@ -51,7 +51,7 @@ export function ChatWindow() {
           {
             id: (Date.now() + 1).toString(),
             role: "assistant",
-            content: `Эхо: "${userMessage.content}" (Streaming API будет на День 3)`,
+            content: `Эхо: &quot;${userMessage.content}&quot; (Streaming API будет на День 3)`,
             timestamp: new Date(),
           },
         ]);
@@ -81,7 +81,7 @@ export function ChatWindow() {
               <Send className="w-16 h-16 mb-4 opacity-50" />
               <p className="text-xl">Начните чат с запроса...</p>
               <p className="text-sm mt-2">
-                Пример: "Создай DataTable shadcn"
+                Пример: &quot;Создай DataTable shadcn&quot;
               </p>
             </div>
           ) : (

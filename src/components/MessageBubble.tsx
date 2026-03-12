@@ -1,9 +1,9 @@
 "use client";
 
 import { Message } from "@/types/chat";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Avatar, AvatarFallback/*, AvatarImage*/ } from "@/components/ui/avatar";
 import { cn } from "@/lib/utils";
-import { User, Bot } from "lucide-react";
+import { /*User,*/ Bot } from "lucide-react";
 
 
 interface MessageBubbleProps {
