@@ -33,31 +33,54 @@ export function ChatWindow() {
     };
 
     setMessages((prev) => [...prev, userMessage]);
+  
+    const assistantId = (Date.now() + 1).toString();
+    const assistantMessage: Message = {
+      id: assistantId,
+      role: "assistant" as const,
+      content: "",
+      timestamp: new Date(),
+    };
+
+    setMessages((prev) => [...prev, assistantMessage]);
     setInput("");
     setIsLoading(true);
 
     try {
-      // TODO: День 3 - API call
-      // const response = await fetch("/api/chat", {
-      //   method: "POST",
-      //   headers: { "Content-Type": "application/json" },
-      //   body: JSON.stringify({ message: userMessage.content }),
-      // });
+      const response = await fetch("/api/chat", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ message: userMessage.content }),
+      });
 
-      // Simulate streaming
-      setTimeout(() => {
-        setMessages((prev) => [
-          ...prev,
-          {
-            id: (Date.now() + 1).toString(),
-            role: "assistant",
-            content: `Эхо: &quot;${userMessage.content}&quot; (Streaming API будет на День 3)`,
-            timestamp: new Date(),
-          },
-        ]);
-      }, 1000);
+      if (!response.body) throw new Error("No response body");
+
+      const reader = response.body.getReader();
+      const decoder = new TextDecoder();
+
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+  
+        const chunk = decoder.decode(value);
+        // Простой парсинг streaming (улучшим позже)
+        setMessages((prev) =>
+          prev.map((msg) =>
+            msg.id === assistantId
+              ? { ...msg, content: msg.content + chunk }
+              : msg
+          )
+        );
+      }
     } catch (error) {
       console.error("Chat error:", error);
+      setMessages((prev) =>
+        prev.map((msg) =>
+          msg.id === assistantId
+            ? { ...msg, content: "Ошибка. Попробуйте еще раз." }
+            : msg
+        )
+      );
     } finally {
       setIsLoading(false);
     }
