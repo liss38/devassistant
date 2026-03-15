@@ -53,6 +53,8 @@ export function ChatWindow() {
         body: JSON.stringify({ message: userMessage.content }),
       });
 
+      console.log(`>>RESPONSE:  `,  response);
+
       if (!response.body) throw new Error("No response body");
 
       const reader = response.body.getReader();
